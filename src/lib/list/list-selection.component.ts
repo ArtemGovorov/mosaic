@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 
 import { FocusKeyManager, IFocusableOption } from '@ptsecurity/cdk/a11y';
 import { SelectionModel } from '@ptsecurity/cdk/collections';
-import { DOWN_ARROW, END, ENTER, HOME, PAGE_DOWN, PAGE_UP, SPACE, UP_ARROW } from '@ptsecurity/cdk/keycodes';
+import { END, ENTER, HOME, PAGE_DOWN, PAGE_UP, SPACE } from '@ptsecurity/cdk/keycodes';
 
 import {
     McLine,
@@ -368,9 +368,10 @@ export class McListSelection extends _McListSelectionMixinBase implements
 
             option.toggle();
         } else {
-            if (this.autoSelect) { this.options.forEach((item) => item.setSelected(false)); }
-
-            option.setSelected(true);
+            if (this.autoSelect) {
+                this.options.forEach((item) => item.setSelected(false));
+                option.setSelected(true);
+            }
         }
 
         this._emitChangeEvent(option);

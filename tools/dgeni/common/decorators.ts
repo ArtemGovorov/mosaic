@@ -11,9 +11,9 @@ import {CategorizedClassDoc, DeprecationDoc, HasDecoratorsDoc} from './dgeni-def
 const SELECTOR_BLACKLIST = new Set([
     '[portal]',
     '[portalHost]',
-    'textarea[mat-autosize]',
+    'textarea[mc-autosize]',
     '[overlay-origin]',
-    '[connected-overlay]',
+    '[connected-overlay]'
 ]);
 
 export function isMethod(doc: MemberDoc) {

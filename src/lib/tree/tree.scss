@@ -1,0 +1,18 @@
+$mat-node-height: 48px;
+
+.mc-tree {
+  display: block;
+}
+
+.mc-tree-node {
+  display: flex;
+  align-items: center;
+  min-height: $mat-node-height;
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.mc-nested-tree-node {
+  border-bottom-width: 0;
+}

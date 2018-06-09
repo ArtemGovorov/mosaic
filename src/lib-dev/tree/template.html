@@ -1,0 +1,22 @@
+<h5>multiple selection</h5>
+
+<mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mc-tree-node *mcTreeNodeDef="let node" mcTreeNodeToggle mcTreeNodePadding>
+        <button disabled></button>
+        {{node.filename}} : {{node.type}}
+    </mc-tree-node>
+
+    <mc-tree-node *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding>
+        <button
+            mcTreeNodeToggle
+            [attr.aria-label]="'toggle ' + node.filename">
+            <!--<mc-icon class="mc-icon-rtl-mirror">-->
+                <!--{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}-->
+            <!--</mc-icon>-->
+        </button>
+        {{node.filename}} : {{node.type}}
+    </mc-tree-node>
+</mc-tree>
+
+<br>
+<div>multipleSelected: {{ multipleSelected }}</div>

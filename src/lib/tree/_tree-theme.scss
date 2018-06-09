@@ -1,0 +1,27 @@
+@import '../core/theming/palette';
+@import '../core/theming/theming';
+@import '../core/styles/typography/typography-utils';
+
+@mixin mc-tree-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    //.mc-tree {
+    //    background: mc-color($background, text);
+    //}
+
+    .mc-tree-node {
+        color: mc-color($foreground, text);
+    }
+}
+
+@mixin mc-tree-typography($config) {
+    .mc-tree {
+        font-family: mc-font-family($config);
+    }
+
+    .mc-tree-node {
+        font-weight: mc-font-weight($config, body);
+        font-size: mc-font-size($config, body);
+    }
+}
