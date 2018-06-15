@@ -50,5 +50,6 @@ export class CdkTreeNodeDef<T> {
 
     /** @docs-private */
     constructor(public template: TemplateRef<any>) {
+        console.log('CdkTreeNodeDef');
     }
 }

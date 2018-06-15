@@ -22,5 +22,5 @@ import { CdkTreeNodeToggle } from '@ptsecurity/cdk/tree';
     providers: [{ provide: CdkTreeNodeToggle, useExisting: McTreeNodeToggle }]
 })
 export class McTreeNodeToggle<T> extends CdkTreeNodeToggle<T> {
-    @Input('matTreeNodeToggleRecursive') recursive: boolean = false;
+    @Input('mсTreeNodeToggleRecursive') recursive: boolean = false;
 }

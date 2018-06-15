@@ -59,15 +59,19 @@ export class CdkTreeNodePadding<T> implements OnDestroy {
     }
 
 
-    constructor(private _treeNode: CdkTreeNode<T>,
-                private _tree: CdkTree<T>,
-                private _renderer: Renderer2,
-                private _element: ElementRef,
-                @Optional() private _dir: Directionality) {
+    constructor(
+        private _treeNode: CdkTreeNode<T>,
+        private _tree: CdkTree<T>,
+        private _renderer: Renderer2,
+        private _element: ElementRef,
+        @Optional() private _dir: Directionality
+    ) {
         this._setPadding();
 
         if (this._dir) {
-            this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding());
+            this._dir.change
+                .pipe(takeUntil(this._destroyed))
+                .subscribe(() => this._setPadding());
         }
     }
 

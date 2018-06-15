@@ -70,7 +70,7 @@ the `NestedTreeControl` to make it work recursively. For flattened tree node, `g
 
 A `mcTreeNodeToggle` can be added in the tree node template to expand/collapse the tree node. The
 toggle toggles the expand/collapse functions in `TreeControl` and is able to expand/collapse a
-tree node recursively by setting `[matTreeNodeToggleRecursive]` to `true`.
+tree node recursively by setting `[mсTreeNodeToggleRecursive]` to `true`.
 
 The toggle can be placed anywhere in the tree node, and is only toggled by `click` action.
 

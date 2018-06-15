@@ -3,8 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { MatTreeFlatDataSource, MatTreeFlattener, McTreeModule } from '@ptsecurity/mosaic/tree';
-import { FlatTreeControl } from '@ptsecurity/cdk/tree';
+import { FlatTreeControl, NestedTreeControl } from '@ptsecurity/cdk/tree';
+import {
+    MatTreeFlatDataSource,
+    MatTreeFlattener,
+    MatTreeNestedDataSource,
+    McTreeModule
+} from '@ptsecurity/mosaic/tree';
 
 import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
 
@@ -118,25 +123,31 @@ class FileDatabase {
     providers: [FileDatabase]
 })
 export class DemoComponent {
-
     treeControl: FlatTreeControl<FileFlatNode>;
-
+    dataSource: MatTreeFlatDataSource<FileNode, FileFlatNode>;
     treeFlattener: MatTreeFlattener<FileNode, FileFlatNode>;
 
-    dataSource: MatTreeFlatDataSource<FileNode, FileFlatNode>;
+    nestedTreeControl: NestedTreeControl<FileNode>;
+    nestedDataSource: MatTreeNestedDataSource<FileNode>;
 
     constructor(database: FileDatabase) {
-        this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,
-            this._isExpandable, this._getChildren);
+        this.treeFlattener = new MatTreeFlattener(
+            this.transformer, this._getLevel, this._isExpandable, this._getChildren
+        );
+
         this.treeControl = new FlatTreeControl<FileFlatNode>(this._getLevel, this._isExpandable);
         this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
+        this.nestedTreeControl = new NestedTreeControl<FileNode>(this._getChildren);
+        this.nestedDataSource = new MatTreeNestedDataSource();
+
         database.dataChange.subscribe((data) => {
             this.dataSource.data = data;
+            this.nestedDataSource.data = data;
         });
     }
 
-    transformer = (node: FileNode, level: number) => {
+    transformer(node: FileNode, level: number) {
         const flatNode = new FileFlatNode();
 
         flatNode.filename = node.filename;
@@ -145,17 +156,17 @@ export class DemoComponent {
         flatNode.expandable = !!node.children;
 
         return flatNode;
-    };
+    }
 
-    private _getLevel = (node: FileFlatNode) => { return node.level; };
+    hasChild(_: number, _nodeData: FileFlatNode) { return _nodeData.expandable; }
 
-    private _isExpandable = (node: FileFlatNode) => { return node.expandable; };
+    private _getLevel(node: FileFlatNode) { return node.level; }
+
+    private _isExpandable(node: FileFlatNode) { return node.expandable; }
 
     private _getChildren = (node: FileNode): Observable<FileNode[]> => {
         return observableOf(node.children);
-    };
-
-    hasChild = (_: number, _nodeData: FileFlatNode) => { return _nodeData.expandable; };
+    }
 }
 
 

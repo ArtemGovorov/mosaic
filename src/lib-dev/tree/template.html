@@ -1,21 +1,25 @@
 <h5>multiple selection</h5>
 
-<mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-    <mc-tree-node *mcTreeNodeDef="let node" mcTreeNodeToggle mcTreeNodePadding>
-        <button disabled></button>
-        {{node.filename}} : {{node.type}}
+<mc-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl">
+    <mc-tree-node *mcTreeNodeDef="let node" mcTreeNodeToggle>
+        {{ node.filename }} : {{ node.type }}
     </mc-tree-node>
 
-    <mc-tree-node *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding>
-        <button
-            mcTreeNodeToggle
-            [attr.aria-label]="'toggle ' + node.filename">
-            <!--<mc-icon class="mc-icon-rtl-mirror">-->
-                <!--{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}-->
-            <!--</mc-icon>-->
-        </button>
-        {{node.filename}} : {{node.type}}
-    </mc-tree-node>
+    <mc-nested-tree-node *mcTreeNodeDef="let node; when: hasNestedChild">
+        <li>
+            <div class="mat-tree-node">
+                <button mcTreeNodeToggle>
+                    <i class="mat-icon-rtl-mirror">
+                        {{ nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                    </i>
+                </button>
+                {{node.filename}}
+            </div>
+            <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
+                <ng-container mcTreeNodeOutlet></ng-container>
+            </ul>
+        </li>
+    </mc-nested-tree-node>
 </mc-tree>
 
 <br>
