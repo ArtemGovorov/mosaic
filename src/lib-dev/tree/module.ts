@@ -16,13 +16,13 @@ import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
 
 class FileNode {
     children: FileNode[];
-    filename: string;
+    name: string;
     type: any;
 }
 
 /** Flat node with expandable and level information */
 class FileFlatNode {
-    filename: string;
+    name: string;
     type: any;
     level: number;
     expandable: boolean;
@@ -98,7 +98,7 @@ class FileDatabase {
             const v = value[k];
             const node = new FileNode();
 
-            node.filename = `${k}`;
+            node.name = `${k}`;
 
             if (v === null || v === undefined) {
                 // no action
@@ -150,7 +150,7 @@ export class DemoComponent {
     transformer(node: FileNode, level: number) {
         const flatNode = new FileFlatNode();
 
-        flatNode.filename = node.filename;
+        flatNode.name = node.name;
         flatNode.type = node.type;
         flatNode.level = level;
         flatNode.expandable = !!node.children;
@@ -160,6 +160,10 @@ export class DemoComponent {
 
     hasChild(_: number, _nodeData: FileFlatNode) { return _nodeData.expandable; }
 
+    hasNestedChild(_: number, nodeData: FileNode) {
+        return !(nodeData.type);
+    }
+
     private _getLevel(node: FileFlatNode) { return node.level; }
 
     private _isExpandable(node: FileFlatNode) { return node.expandable; }
@@ -167,6 +171,7 @@ export class DemoComponent {
     private _getChildren = (node: FileNode): Observable<FileNode[]> => {
         return observableOf(node.children);
     }
+
 }
 
 

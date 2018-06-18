@@ -1,18 +1,41 @@
 $mat-node-height: 48px;
 
+
 .mc-tree {
-  display: block;
+    display: block;
+
+    border: 1px solid red;
 }
 
-.mc-tree-node {
-  display: flex;
-  align-items: center;
-  min-height: $mat-node-height;
-  flex: 1;
-  overflow: hidden;
-  word-wrap: break-word;
+
+.mc-tree-leaf {
+    display: flex;
+    align-items: center;
+    //min-height: $mat-node-height;
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+
+    padding-left: 20px;
 }
 
-.mc-nested-tree-node {
-  border-bottom-width: 0;
+
+.tree-invisible {
+    display: none;
 }
+
+
+mc-tree-branch {
+    display: block;
+}
+
+
+.mc-tree-branch__children {
+    padding-left: 10px;
+}
+
+
+.mc-tree-branch__data {
+
+}
+

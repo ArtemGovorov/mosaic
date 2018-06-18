@@ -10,7 +10,7 @@
     //    background: mc-color($background, text);
     //}
 
-    .mc-tree-node {
+    .mc-tree-leaf {
         color: mc-color($foreground, text);
     }
 }
@@ -20,7 +20,7 @@
         font-family: mc-font-family($config);
     }
 
-    .mc-tree-node {
+    .mc-tree-leaf {
         font-weight: mc-font-weight($config, body);
         font-size: mc-font-size($config, body);
     }

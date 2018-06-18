@@ -18,9 +18,9 @@ used to style the node such that it is indented to the appropriate level.
 
 ```html
 <mc-tree>
-  <mc-tree-node> parent node </mc-tree-node>
-  <mc-tree-node> -- child node1 </mc-tree-node>
-  <mc-tree-node> -- child node2 </mc-tree-node>
+  <mc-tree-leaf> parent node </mc-tree-leaf>
+  <mc-tree-leaf> -- child node1 </mc-tree-leaf>
+  <mc-tree-leaf> -- child node2 </mc-tree-leaf>
 </mc-tree>
 ```
 
@@ -37,11 +37,11 @@ outlet to keep all the children nodes.
 
 ```html
 <mc-tree>
-   <mc-nested-tree-node>
+   <mc-tree-branch>
      parent node
-     <mc-nested-tree-node> -- child node1 </mc-nested-tree-node>
-     <mc-nested-tree-node> -- child node2 </mc-nested-tree-node>
-   </mc-nested-tree-node>
+     <mc-tree-branch> -- child node1 </mc-tree-branch>
+     <mc-tree-branch> -- child node2 </mc-tree-branch>
+   </mc-tree-branch>
 </mc-tree>
 ```
 

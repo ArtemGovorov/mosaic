@@ -488,7 +488,7 @@ class FakeDataSource {
 }
 
 function getNodes(treeElement: Element): Element[] {
-    return [].slice.call(treeElement.querySelectorAll('.mc-tree-node, .mc-nested-tree-node'))!;
+    return [].slice.call(treeElement.querySelectorAll('.mc-tree-leaf, .mc-tree-branch'))!;
 }
 
 function expectFlatTreeToMatch(treeElement: Element, expectedPaddingIndent: number = 28,
@@ -583,11 +583,11 @@ function expectNestedTreeToMatch(treeElement: Element, ...expectedTree: any[]) {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-node *mcTreeNodeDef="let node" class="customNodeClass"
+            <mc-tree-leaf *mcTreeNodeDef="let node" class="customNodeClass"
                           mcTreeNodePadding [mcTreeNodePaddingIndent]="28"
                           mcTreeNodeToggle>
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-            </mc-tree-node>
+            </mc-tree-leaf>
         </mc-tree>
     `
 })
@@ -621,10 +621,10 @@ class SimpleMatTreeApp {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-nested-tree-node *mcTreeNodeDef="let node" class="customNodeClass">
+            <mc-tree-branch *mcTreeNodeDef="let node" class="customNodeClass">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <ng-template mcTreeNodeOutlet></ng-template>
-            </mc-nested-tree-node>
+            </mc-tree-branch>
         </mc-tree>
     `
 })
@@ -648,17 +648,17 @@ class NestedMatTreeApp {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-nested-tree-node *mcTreeNodeDef="let node">
+            <mc-tree-branch *mcTreeNodeDef="let node">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <ng-template mcTreeNodeOutlet></ng-template>
-            </mc-nested-tree-node>
-            <mc-nested-tree-node *mcTreeNodeDef="let node; when: isSpecial"
+            </mc-tree-branch>
+            <mc-tree-branch *mcTreeNodeDef="let node; when: isSpecial"
                                  mcTreeNodeToggle>
                 >>> {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
                     <ng-template mcTreeNodeOutlet></ng-template>
                 </div>
-            </mc-nested-tree-node>
+            </mc-tree-branch>
         </mc-tree>
     `
 })
@@ -685,11 +685,11 @@ class WhenNodeNestedMatTreeApp {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-node *mcTreeNodeDef="let node" class="customNodeClass"
+            <mc-tree-leaf *mcTreeNodeDef="let node" class="customNodeClass"
                           mcTreeNodePadding
                           mcTreeNodeToggle [mcTreeNodeToggleRecursive]="toggleRecursively">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-            </mc-tree-node>
+            </mc-tree-leaf>
         </mc-tree>
     `
 })
@@ -724,13 +724,13 @@ class MatTreeAppWithToggle {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-nested-tree-node *mcTreeNodeDef="let node" class="customNodeClass"
+            <mc-tree-branch *mcTreeNodeDef="let node" class="customNodeClass"
                                  mcTreeNodeToggle [mcTreeNodeToggleRecursive]="toggleRecursively">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
                     <ng-template mcTreeNodeOutlet></ng-template>
                 </div>
-            </mc-nested-tree-node>
+            </mc-tree-branch>
         </mc-tree>
     `
 })
@@ -755,16 +755,16 @@ class NestedMatTreeAppWithToggle {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-node *mcTreeNodeDef="let node" class="customNodeClass"
+            <mc-tree-leaf *mcTreeNodeDef="let node" class="customNodeClass"
                           mcTreeNodePadding [mcTreeNodePaddingIndent]="28"
                           mcTreeNodeToggle>
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-            </mc-tree-node>
-            <mc-tree-node *mcTreeNodeDef="let node; when: isSpecial" class="customNodeClass"
+            </mc-tree-leaf>
+            <mc-tree-leaf *mcTreeNodeDef="let node; when: isSpecial" class="customNodeClass"
                           mcTreeNodePadding [mcTreeNodePaddingIndent]="28"
                           mcTreeNodeToggle>
                 >>> {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-            </mc-tree-node>
+            </mc-tree-leaf>
         </mc-tree>
     `
 })
