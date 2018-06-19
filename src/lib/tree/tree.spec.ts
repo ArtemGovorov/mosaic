@@ -488,7 +488,7 @@ class FakeDataSource {
 }
 
 function getNodes(treeElement: Element): Element[] {
-    return [].slice.call(treeElement.querySelectorAll('.mc-tree-leaf, .mc-tree-branch'))!;
+    return [].slice.call(treeElement.querySelectorAll('.mc-tree-leaf, .mc-tree-node'))!;
 }
 
 function expectFlatTreeToMatch(treeElement: Element, expectedPaddingIndent: number = 28,
@@ -621,10 +621,10 @@ class SimpleMatTreeApp {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-branch *mcTreeNodeDef="let node" class="customNodeClass">
+            <mc-tree-node *mcTreeNodeDef="let node" class="customNodeClass">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <ng-template mcTreeNodeOutlet></ng-template>
-            </mc-tree-branch>
+            </mc-tree-node>
         </mc-tree>
     `
 })
@@ -648,17 +648,17 @@ class NestedMatTreeApp {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-branch *mcTreeNodeDef="let node">
+            <mc-tree-node *mcTreeNodeDef="let node">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <ng-template mcTreeNodeOutlet></ng-template>
-            </mc-tree-branch>
-            <mc-tree-branch *mcTreeNodeDef="let node; when: isSpecial"
+            </mc-tree-node>
+            <mc-tree-node *mcTreeNodeDef="let node; when: isSpecial"
                                  mcTreeNodeToggle>
                 >>> {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
                     <ng-template mcTreeNodeOutlet></ng-template>
                 </div>
-            </mc-tree-branch>
+            </mc-tree-node>
         </mc-tree>
     `
 })
@@ -724,13 +724,13 @@ class MatTreeAppWithToggle {
 @Component({
     template: `
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
-            <mc-tree-branch *mcTreeNodeDef="let node" class="customNodeClass"
+            <mc-tree-node *mcTreeNodeDef="let node" class="customNodeClass"
                                  mcTreeNodeToggle [mcTreeNodeToggleRecursive]="toggleRecursively">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
                     <ng-template mcTreeNodeOutlet></ng-template>
                 </div>
-            </mc-tree-branch>
+            </mc-tree-node>
         </mc-tree>
     `
 })

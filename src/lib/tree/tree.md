@@ -37,11 +37,11 @@ outlet to keep all the children nodes.
 
 ```html
 <mc-tree>
-   <mc-tree-branch>
+   <mc-tree-node>
      parent node
-     <mc-tree-branch> -- child node1 </mc-tree-branch>
-     <mc-tree-branch> -- child node2 </mc-tree-branch>
-   </mc-tree-branch>
+     <mc-tree-node> -- child node1 </mc-tree-node>
+     <mc-tree-node> -- child node2 </mc-tree-node>
+   </mc-tree-node>
 </mc-tree>
 ```
 

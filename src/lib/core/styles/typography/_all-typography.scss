@@ -16,4 +16,5 @@
     @include mc-button-typography($config);
     @include mc-list-typography($config);
     @include mc-radio-typography($config);
+    @include mc-tree-typography($config);
 }

@@ -8,7 +8,7 @@
 
 import {
     AfterContentInit,
-    Attribute,
+    Attribute, Component,
     ContentChildren,
     Directive,
     ElementRef,
@@ -43,7 +43,6 @@ export const _MatNestedTreeNodeMixinBase = mixinTabIndex(mixinDisabled(CdkNested
     host: {
         '[attr.aria-expanded]': 'isExpanded',
         '[attr.aria-level]': 'role === "treeitem" ? level : null',
-        '[attr.role]': 'role',
         class: 'mc-tree-leaf'
     },
     providers: [{ provide: CdkTreeNode, useExisting: McTreeNode }]
@@ -67,9 +66,7 @@ export class McTreeNode<T> extends _MatTreeNodeMixinBase<T> implements CanDisabl
  */
 @Directive({
     selector: '[mcTreeNodeDef]',
-    inputs: [
-        'when: mcTreeNodeDefWhen'
-    ],
+    inputs: ['when: mcTreeNodeDefWhen'],
     providers: [{ provide: CdkTreeNodeDef, useExisting: McTreeNodeDef }]
 })
 export class McTreeNodeDef<T> extends CdkTreeNodeDef<T> {
@@ -80,12 +77,11 @@ export class McTreeNodeDef<T> extends CdkTreeNodeDef<T> {
  * Wrapper for the CdkTree nested node with Material design styles.
  */
 @Directive({
-    selector: 'mc-tree-branch',
+    selector: 'mc-tree-node',
     exportAs: 'mcNestedTreeNode',
     host: {
         '[attr.aria-expanded]': 'isExpanded',
-        '[attr.role]': 'role',
-        class: 'mc-tree-branch'
+        class: 'mc-tree-node'
     },
     inputs: ['disabled', 'tabIndex'],
     providers: [
@@ -122,3 +118,13 @@ export class McNestedTreeNode<T> extends _MatNestedTreeNodeMixinBase<T>
         super.ngOnDestroy();
     }
 }
+
+/**
+ * Wrapper for the CdkTree nested node with Material design styles.
+ */
+@Directive({
+    selector: 'mc-tree-branch',
+    exportAs: 'mcTreeBranch',
+    host: { class: 'mc-tree-branch' }
+})
+export class McTreeBranch {}

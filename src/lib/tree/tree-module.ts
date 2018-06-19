@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { CdkTreeModule } from '@ptsecurity/cdk/tree';
 // import { MatCommonModule } from '@ptsecurity/mosaic/core';
 
-import { McNestedTreeNode, McTreeNodeDef, McTreeNode } from './node';
+import { McNestedTreeNode, McTreeNodeDef, McTreeNode, McTreeBranch } from './node';
 import { McTreeNodeOutlet } from './outlet';
 import { McTreeNodePadding } from './padding';
 import { McTreeNodeToggle } from './toggle';
@@ -26,6 +26,7 @@ const MC_TREE_DIRECTIVES = [
     McTreeNodeToggle,
     McTree,
     McTreeNode,
+    McTreeBranch,
     McTreeNodeOutlet
 ];
 

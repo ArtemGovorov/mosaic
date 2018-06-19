@@ -1,21 +1,20 @@
 <h5>multiple selection</h5>
 
 <mc-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl">
-    <mc-tree-leaf *mcTreeNodeDef="let node">
-        {{ node.name }}.{{ node.type }}
+    <mc-tree-leaf class="mc-focused" *mcTreeNodeDef="let node">
+        {{ node.name }}.{{ node.type }} level: {{ level }}
     </mc-tree-leaf>
 
-    <mc-tree-branch *mcTreeNodeDef="let node; when: hasNestedChild">
-        <div class="mc-tree-branch__data">
-            <i class="mc-tree-branch__icon" mcTreeNodeToggle>
-                {{ nestedTreeControl.isExpanded(node) ? 'expanded' : 'collapsed'}}
-            </i>
+    <mc-tree-node *mcTreeNodeDef="let node; when: hasNestedChild">
+        <div class="mc-tree-node__data">
+            <i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>
             {{ node.name }}
         </div>
-        <div class="mc-tree-branch__children" [class.tree-invisible]="!nestedTreeControl.isExpanded(node)">
+        <div class="mc-tree-branch"
+            [class.tree-invisible]="!nestedTreeControl.isExpanded(node)">
             <ng-container mcTreeNodeOutlet></ng-container>
         </div>
-    </mc-tree-branch>
+    </mc-tree-node>
 </mc-tree>
 
 <br>

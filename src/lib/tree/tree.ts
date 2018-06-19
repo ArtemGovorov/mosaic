@@ -24,7 +24,7 @@ import { McTreeNodeOutlet } from './outlet';
         class: 'mc-tree',
         role: 'tree'
     },
-    styleUrls: ['tree.css'],
+    styleUrls: ['./tree.css'],
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [{ provide: CdkTree, useExisting: McTree }]

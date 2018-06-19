@@ -2,6 +2,7 @@
 @import '../core/theming/theming';
 @import '../core/styles/typography/typography-utils';
 
+
 @mixin mc-tree-theme($theme) {
     $background: map-get($theme, background);
     $foreground: map-get($theme, foreground);
@@ -10,8 +11,49 @@
     //    background: mc-color($background, text);
     //}
 
-    .mc-tree-leaf {
+    .mc-tree-leaf,
+    .mc-tree-node__data {
+        position: relative;
+
         color: mc-color($foreground, text);
+
+        &:after {
+            content: '';
+
+            display: block;
+
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+
+            margin-left: 2px;
+            margin-right: 2px;
+
+            z-index: -1;
+
+            border: 2px solid transparent;
+        }
+
+        &.mc-focused:after {
+            border-color: mc-color($primary, 500);
+        }
+
+        &.mc-selected:after {
+            background-color: mc-color($primary, 100);
+        }
+
+        &:hover,
+        &.mc-hovered {
+            &:after {
+                background-color: mc-color($background, 'hover');
+            }
+        }
+
+        &[disabled] {
+            background-color: transparent;
+
+            color: mc-color($foreground, disabled-text);
+        }
     }
 }
 

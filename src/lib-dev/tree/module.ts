@@ -12,6 +12,7 @@ import {
 } from '@ptsecurity/mosaic/tree';
 
 import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import { McIconModule } from '@ptsecurity/mosaic/icon';
 
 
 class FileNode {
@@ -30,6 +31,15 @@ class FileFlatNode {
 
 const TREE_DATA = `
   {
+  "rootNode_1": "app",
+  "Pictures": {
+        "Sun": "png",
+        "Woods": "jpg",
+        "Photo Booth Library": {
+          "Contents": "dir",
+          "Pictures": "dir"
+        }
+    },
     "Documents": {
       "angular": {
         "src": {
@@ -49,14 +59,6 @@ const TREE_DATA = `
         "Tutorial": "html",
         "November": "pdf",
         "October": "pdf"
-    },
-    "Pictures": {
-        "Sun": "png",
-        "Woods": "jpg",
-        "Photo Booth Library": {
-          "Contents": "dir",
-          "Pictures": "dir"
-        }
     },
     "Applications": {
         "Chrome": "app",
@@ -182,7 +184,8 @@ export class DemoComponent {
     imports: [
         BrowserModule,
         FormsModule,
-        McTreeModule
+        McTreeModule,
+        McIconModule
     ],
     bootstrap: [
         DemoComponent
