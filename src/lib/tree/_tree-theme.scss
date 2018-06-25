@@ -11,42 +11,25 @@
     //    background: mc-color($background, text);
     //}
 
-    .mc-tree-leaf,
-    .mc-tree-node__data {
-        position: relative;
-
+    .mc-tree-node {
         color: mc-color($foreground, text);
 
-        &:after {
-            content: '';
+        margin-left: 2px;
+        margin-right: 2px;
 
-            display: block;
+        border: 2px solid transparent;
 
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 0; right: 0;
-
-            margin-left: 2px;
-            margin-right: 2px;
-
-            z-index: -1;
-
-            border: 2px solid transparent;
-        }
-
-        &.mc-focused:after {
+        &.mc-focused {
             border-color: mc-color($primary, 500);
-        }
-
-        &.mc-selected:after {
-            background-color: mc-color($primary, 100);
         }
 
         &:hover,
         &.mc-hovered {
-            &:after {
-                background-color: mc-color($background, 'hover');
-            }
+            background-color: mc-color($background, 'hover');
+        }
+
+        &.mc-selected {
+            background-color: mc-color($primary, 100);
         }
 
         &[disabled] {
@@ -62,7 +45,7 @@
         font-family: mc-font-family($config);
     }
 
-    .mc-tree-leaf {
+    .mc-tree-node {
         font-weight: mc-font-weight($config, body);
         font-size: mc-font-size($config, body);
     }

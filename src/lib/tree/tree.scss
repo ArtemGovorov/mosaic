@@ -4,8 +4,6 @@
 
 $mc-node-height: 32px;
 
-$mc-tree-padding: 0 0 0 8px;
-
 $mc-tree-node-padding: 16px;
 $mc-tree-leaf-padding: 16px;
 
@@ -13,11 +11,10 @@ $mc-tree-leaf-padding: 16px;
 .mc-tree {
     display: block;
 
-    padding: $mc-tree-padding;
     border: 1px solid bisque;
 }
 
-.mc-tree-node {
+.mc-tree-nested-node {
     display: block;
 }
 
@@ -25,28 +22,19 @@ $mc-tree-leaf-padding: 16px;
     padding-left: 16px;
 }
 
-.mc-tree-node__data {
+.mc-tree-node {
     display: flex;
     align-items: center;
 
     height: $mc-node-height;
+
+    word-wrap: break-word;
 
     & > .mc-icon {
         margin-right: 4px;
 
         cursor: pointer;
     }
-}
-
-.mc-tree-leaf {
-    display: flex;
-    align-items: center;
-
-    height: $mc-node-height;
-
-    padding-left: 20px;
-
-    word-wrap: break-word;
 }
 
 

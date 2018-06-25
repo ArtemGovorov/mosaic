@@ -23,4 +23,14 @@ export class McTreeNodePadding<T> extends CdkTreeNodePadding<T> {
 
     /** The indent for each level. Default number 40px from material design menu sub-menu spec. */
     @Input('matTreeNodePaddingIndent') indent: number;
+
+    _paddingIndent(): string | null {
+        const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
+            ? this._tree.treeControl.getLevel(this._treeNode.data)
+            : null;
+
+        const level = this._level || nodeLevel;
+
+        return level ? `${(level * this._indent) + 12}px` : '12px';
+    }
 }

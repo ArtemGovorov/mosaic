@@ -37,13 +37,13 @@ export const _MatNestedTreeNodeMixinBase = mixinTabIndex(mixinDisabled(CdkNested
  * Wrapper for the CdkTree node with Material design styles.
  */
 @Directive({
-    selector: 'mc-tree-leaf',
+    selector: 'mc-tree-node',
     exportAs: 'mcTreeNode',
     inputs: ['disabled', 'tabIndex'],
     host: {
         '[attr.aria-expanded]': 'isExpanded',
         '[attr.aria-level]': 'role === "treeitem" ? level : null',
-        class: 'mc-tree-leaf'
+        class: 'mc-tree-node'
     },
     providers: [{ provide: CdkTreeNode, useExisting: McTreeNode }]
 })
@@ -77,11 +77,11 @@ export class McTreeNodeDef<T> extends CdkTreeNodeDef<T> {
  * Wrapper for the CdkTree nested node with Material design styles.
  */
 @Directive({
-    selector: 'mc-tree-node',
+    selector: 'mc-tree-nested-node',
     exportAs: 'mcNestedTreeNode',
     host: {
         '[attr.aria-expanded]': 'isExpanded',
-        class: 'mc-tree-node'
+        class: 'mc-tree-nested-node'
     },
     inputs: ['disabled', 'tabIndex'],
     providers: [

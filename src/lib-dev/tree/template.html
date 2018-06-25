@@ -1,21 +1,32 @@
 <h5>multiple selection</h5>
 
-<mc-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl">
-    <mc-tree-leaf class="mc-focused" *mcTreeNodeDef="let node">
-        {{ node.name }}.{{ node.type }} level: {{ level }}
-    </mc-tree-leaf>
+<mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mc-tree-node class="mc-selected" *mcTreeNodeDef="let node" mcTreeNodePadding>
+        {{ node.name }}
+    </mc-tree-node>
 
-    <mc-tree-node *mcTreeNodeDef="let node; when: hasNestedChild">
-        <div class="mc-tree-node__data">
-            <i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>
-            {{ node.name }}
-        </div>
-        <div class="mc-tree-branch"
-            [class.tree-invisible]="!nestedTreeControl.isExpanded(node)">
-            <ng-container mcTreeNodeOutlet></ng-container>
-        </div>
+    <mc-tree-node *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding>
+        <i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>
+        {{ node.name }} : {{ node.type }}
     </mc-tree-node>
 </mc-tree>
+
+<!--<mc-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl">-->
+    <!--<mc-tree-leaf class="mc-selected" *mcTreeNodeDef="let node">-->
+        <!--{{ node.name }}.{{ node.type }} level: {{ node.level }}-->
+    <!--</mc-tree-leaf>-->
+
+    <!--<mc-tree-node *mcTreeNodeDef="let node; when: hasNestedChild">-->
+        <!--<div class="mc-tree-node__data">-->
+            <!--<i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>-->
+            <!--{{ node.name }}level: {{ node.level }}-->
+        <!--</div>-->
+        <!--<div class="mc-tree-branch"-->
+            <!--[class.tree-invisible]="!nestedTreeControl.isExpanded(node)">-->
+            <!--<ng-container mcTreeNodeOutlet></ng-container>-->
+        <!--</div>-->
+    <!--</mc-tree-node>-->
+<!--</mc-tree>-->
 
 <br>
 <div>multipleSelected: {{ multipleSelected }}</div>

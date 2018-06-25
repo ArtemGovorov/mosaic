@@ -28,7 +28,7 @@ export class CdkTreeNodePadding<T> implements OnDestroy {
     /** Subject that emits when the component has been destroyed. */
 
     _level: number;
-    _indent: number = 40;
+    _indent: number = 16;
 
     private _destroyed = new Subject<void>();
 
@@ -45,8 +45,6 @@ export class CdkTreeNodePadding<T> implements OnDestroy {
     }
 
 
-    /** The indent for each level. Default number 40px from material design menu sub-menu spec. */
-    // TODO(tinayuangao): Make indent working with a string with unit, e.g. 10em
     @Input('cdkTreeNodePaddingIndent')
     get indent(): number {
         return this._indent;
@@ -85,9 +83,10 @@ export class CdkTreeNodePadding<T> implements OnDestroy {
         const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
             ? this._tree.treeControl.getLevel(this._treeNode.data)
             : null;
+
         const level = this._level || nodeLevel;
 
-        return level ? `${level * this._indent}px` : null;
+        return level ? `${(level * this._indent) + 12}px` : '12px';
     }
 
     _setPadding() {
