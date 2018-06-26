@@ -11,7 +11,7 @@ import {
     McTreeModule
 } from '@ptsecurity/mosaic/tree';
 
-import {BehaviorSubject, Observable, of as observableOf} from 'rxjs';
+import { BehaviorSubject, Observable, of as observableOf } from 'rxjs';
 import { McIconModule } from '@ptsecurity/mosaic/icon';
 
 

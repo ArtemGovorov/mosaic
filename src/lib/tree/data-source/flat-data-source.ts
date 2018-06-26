@@ -1,11 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import { CollectionViewer, DataSource } from '@ptsecurity/cdk/collections';
 import { FlatTreeControl, ITreeControl } from '@ptsecurity/cdk/tree';
 import { BehaviorSubject, merge, Observable } from 'rxjs';

@@ -1,18 +1,10 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { CdkTreeModule } from '@ptsecurity/cdk/tree';
 // import { MatCommonModule } from '@ptsecurity/mosaic/core';
 
-import { McNestedTreeNode, McTreeNodeDef, McTreeNode, McTreeBranch } from './node';
+import { McNestedTreeNode, McTreeNodeDef, McTreeNode } from './node';
 import { McTreeNodeOutlet } from './outlet';
 import { McTreeNodePadding } from './padding';
 import { McTreeNodeToggle } from './toggle';
@@ -26,7 +18,6 @@ const MC_TREE_DIRECTIVES = [
     McTreeNodeToggle,
     McTree,
     McTreeNode,
-    McTreeBranch,
     McTreeNodeOutlet
 ];
 

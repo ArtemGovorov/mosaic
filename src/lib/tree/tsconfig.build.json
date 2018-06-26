@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-build",
+    "extends": "../tsconfig.build",
     "files": [ "public-api.ts" ],
     "angularCompilerOptions": {
         "annotateForClosureCompiler": true,

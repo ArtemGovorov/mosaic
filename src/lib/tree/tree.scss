@@ -18,10 +18,6 @@ $mc-tree-leaf-padding: 16px;
     display: block;
 }
 
-.mc-tree-branch {
-    padding-left: 16px;
-}
-
 .mc-tree-node {
     display: flex;
     align-items: center;
@@ -35,10 +31,11 @@ $mc-tree-leaf-padding: 16px;
 
         cursor: pointer;
     }
+
+    &:focus {
+        outline: none;
+    }
 }
-
-
-
 
 
 .tree-invisible {
