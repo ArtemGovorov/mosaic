@@ -49,7 +49,6 @@ import {
         class: 'mc-list-option',
         '[class.mc-selected]': 'selected',
         '[class.mc-focused]': '_hasFocus',
-        '[class.mc-list-option-disabled]': 'disabled',
         '(focus)': '_handleFocus()',
         '(blur)': '_handleBlur()',
         '(click)': '_handleClick()'

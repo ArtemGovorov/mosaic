@@ -1,14 +1,5 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import {
     AfterContentInit,
-    Attribute, Component,
     ContentChildren,
     Directive,
     ElementRef,
@@ -25,41 +16,13 @@ import {
     CdkTreeNodeDef
 } from '@ptsecurity/cdk/tree';
 
-import { CanDisable, HasTabIndex, mixinDisabled, mixinTabIndex } from '@ptsecurity/mosaic/core';
+import { CanDisable, mixinDisabled } from '@ptsecurity/mosaic/core';
 
 import { McTreeNodeOutlet } from './outlet';
 
 
-export const _MatTreeNodeMixinBase = mixinTabIndex(mixinDisabled(CdkTreeNode));
-export const _MatNestedTreeNodeMixinBase = mixinTabIndex(mixinDisabled(CdkNestedTreeNode));
+export const _MatNestedTreeNodeMixinBase = mixinDisabled(CdkNestedTreeNode);
 
-/**
- * Wrapper for the CdkTree node with Material design styles.
- */
-@Directive({
-    selector: 'mc-tree-node',
-    exportAs: 'mcTreeNode',
-    inputs: ['disabled', 'tabIndex'],
-    host: {
-        '[attr.aria-expanded]': 'isExpanded',
-        '[attr.aria-level]': 'role === "treeitem" ? level : null',
-        class: 'mc-tree-node'
-    },
-    providers: [{ provide: CdkTreeNode, useExisting: McTreeNode }]
-})
-export class McTreeNode<T> extends _MatTreeNodeMixinBase<T> implements CanDisable, HasTabIndex {
-    @Input() role: 'treeitem' | 'group' = 'treeitem';
-
-    constructor(
-        protected _elementRef: ElementRef,
-        protected _tree: CdkTree<T>,
-        @Attribute('tabindex') tabIndex: string
-    ) {
-        super(_elementRef, _tree);
-
-        this.tabIndex = Number(tabIndex) || 0;
-    }
-}
 
 /**
  * Wrapper for the CdkTree node definition with Material design styles.
@@ -90,7 +53,7 @@ export class McTreeNodeDef<T> extends CdkTreeNodeDef<T> {
     ]
 })
 export class McNestedTreeNode<T> extends _MatNestedTreeNodeMixinBase<T>
-    implements AfterContentInit, CanDisable, HasTabIndex, OnDestroy {
+    implements AfterContentInit, CanDisable, OnDestroy {
 
     @Input('matNestedTreeNode') node: T;
 
@@ -99,12 +62,9 @@ export class McNestedTreeNode<T> extends _MatNestedTreeNodeMixinBase<T>
     constructor(
         protected _elementRef: ElementRef,
         protected _tree: CdkTree<T>,
-        protected _differs: IterableDiffers,
-        @Attribute('tabindex') tabIndex: string
+        protected _differs: IterableDiffers
     ) {
         super(_elementRef, _tree, _differs);
-
-        this.tabIndex = Number(tabIndex) || 0;
     }
 
     // This is a workaround for https://github.com/angular/angular/issues/23091
@@ -118,13 +78,3 @@ export class McNestedTreeNode<T> extends _MatNestedTreeNodeMixinBase<T>
         super.ngOnDestroy();
     }
 }
-
-/**
- * Wrapper for the CdkTree nested node with Material design styles.
- */
-@Directive({
-    selector: 'mc-tree-branch',
-    exportAs: 'mcTreeBranch',
-    host: { class: 'mc-tree-branch' }
-})
-export class McTreeBranch {}

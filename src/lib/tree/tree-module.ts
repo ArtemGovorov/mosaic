@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { CdkTreeModule } from '@ptsecurity/cdk/tree';
 // import { MatCommonModule } from '@ptsecurity/mosaic/core';
 
-import { McNestedTreeNode, McTreeNodeDef, McTreeNode } from './node';
+import { McNestedTreeNode, McTreeNodeDef } from './node';
+import { McTreeNodeOption } from './node-option';
 import { McTreeNodeOutlet } from './outlet';
 import { McTreeNodePadding } from './padding';
 import { McTreeNodeToggle } from './toggle';
-import { McTree } from './tree';
+import { McTreeSelection } from './tree';
 
 
 const MC_TREE_DIRECTIVES = [
@@ -16,14 +17,14 @@ const MC_TREE_DIRECTIVES = [
     McTreeNodeDef,
     McTreeNodePadding,
     McTreeNodeToggle,
-    McTree,
-    McTreeNode,
+    McTreeSelection,
+    McTreeNodeOption,
     McTreeNodeOutlet
 ];
 
 @NgModule({
     // imports: [CdkTreeModule, CommonModule, MatCommonModule],
-    imports: [CdkTreeModule, CommonModule],
+    imports: [CommonModule],
     exports: MC_TREE_DIRECTIVES,
     declarations: MC_TREE_DIRECTIVES
 })

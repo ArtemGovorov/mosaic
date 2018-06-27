@@ -1,11 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
 import { Directive, ElementRef, Input, OnDestroy, Optional, Renderer2 } from '@angular/core';
 
 import { Directionality } from '@ptsecurity/cdk/bidi';
@@ -58,8 +50,8 @@ export class CdkTreeNodePadding<T> implements OnDestroy {
 
 
     constructor(
-        private _treeNode: CdkTreeNode<T>,
-        private _tree: CdkTree<T>,
+        protected _treeNode: CdkTreeNode<T>,
+        protected _tree: CdkTree<T>,
         private _renderer: Renderer2,
         private _element: ElementRef,
         @Optional() private _dir: Directionality

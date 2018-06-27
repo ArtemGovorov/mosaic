@@ -198,8 +198,6 @@ export class CdkTree<T>
     constructor(private _differs: IterableDiffers, private _changeDetectorRef: ChangeDetectorRef) {}
 
     ngOnInit() {
-        console.log('ngOnInit');
-
         this._dataDiffer = this._differs.find([]).create(this.trackBy);
 
         if (!this.treeControl) {
@@ -224,8 +222,6 @@ export class CdkTree<T>
     }
 
     ngAfterContentChecked() {
-        console.log('ngAfterContentChecked');
-
         const defaultNodeDefs = this._nodeDefs.filter((def) => !def.when);
         if (defaultNodeDefs.length > 1) {
             throw getTreeMultipleDefaultNodeDefsError();
@@ -247,7 +243,6 @@ export class CdkTree<T>
         viewContainer: ViewContainerRef = this._nodeOutlet.viewContainer,
         parentData?: T
     ) {
-        console.log('renderNodeChanges');
         const changes = dataDiffer.diff(data);
 
         if (!changes) { return; }
@@ -276,7 +271,6 @@ export class CdkTree<T>
      * definition.
      */
     _getNodeDef(data: T, i: number): CdkTreeNodeDef<T> {
-        console.log('_getNodeDef');
         if (this._nodeDefs.length === 1) { return this._nodeDefs.first; }
 
         const nodeDef =
@@ -292,7 +286,6 @@ export class CdkTree<T>
      * within the data node view container.
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T) {
-        console.log('insertNode');
         const node = this._getNodeDef(nodeData, index);
 
         // Node context that will be provided to created embedded view
@@ -324,7 +317,6 @@ export class CdkTree<T>
 
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges() {
-        console.log('_observeRenderChanges');
         let dataStream: Observable<T[]> | undefined;
 
         // Cannot use `instanceof DataSource` since the data source could be a literal with
@@ -352,8 +344,6 @@ export class CdkTree<T>
      * clearing the node outlet. Otherwise start listening for new data.
      */
     private _switchDataSource(dataSource: DataSource<T> | Observable<T[]> | T[]) {
-        console.log('_switchDataSource');
-
         if (this._dataSource && typeof (this._dataSource as DataSource<T>).disconnect === 'function') {
             (this.dataSource as DataSource<T>).disconnect(this);
         }
