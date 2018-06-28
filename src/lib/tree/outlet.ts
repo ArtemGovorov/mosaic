@@ -8,6 +8,6 @@ import { Directive, ViewContainerRef } from '@angular/core';
  * inside the outlet.
  */
 @Directive({ selector: '[mcTreeNodeOutlet]' })
-export class McTreeNodeOutlet implements CdkTreeNodeOutlet {
+export class McTreeNodeOutlet {
   constructor(public viewContainer: ViewContainerRef) {}
 }

@@ -1,7 +1,7 @@
 import { CanDisable, HasTabIndex, mixinDisabled, mixinTabIndex, toBoolean } from '@ptsecurity/mosaic/core';
 
 import {
-    AfterContentInit, AfterViewInit,
+    AfterContentInit,
     Attribute,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -14,11 +14,10 @@ import {
 import { FocusKeyManager } from '@ptsecurity/cdk/a11y';
 import { CdkTree } from '@ptsecurity/cdk/tree';
 
-import { END, ENTER, HOME, PAGE_DOWN, PAGE_UP, SPACE } from '@ptsecurity/cdk/keycodes';
+import { END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE } from '@ptsecurity/cdk/keycodes';
 
 import { McTreeNodeOption } from './node-option';
 import { McTreeNodeOutlet } from './outlet';
-import { McListOption } from '@ptsecurity/mosaic/list/list-selection.component';
 
 
 export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
@@ -42,7 +41,7 @@ export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
     providers: [{ provide: CdkTree, useExisting: McTreeSelection }]
 })
 export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
-    implements AfterContentInit, AfterViewInit, CanDisable, HasTabIndex {
+    implements AfterContentInit, CanDisable, HasTabIndex {
     // Outlets within the tree's template where the dataNodes will be inserted.
     @ViewChild(McTreeNodeOutlet) _nodeOutlet: McTreeNodeOutlet;
 
@@ -87,6 +86,16 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         const keyCode = event.keyCode;
 
         switch (keyCode) {
+            case LEFT_ARROW:
+                console.log('need collapse node');
+                event.preventDefault();
+
+                break;
+            case RIGHT_ARROW:
+                console.log('need expand node');
+                event.preventDefault();
+
+                break;
             case SPACE:
             case ENTER:
                 console.log('need select');
@@ -116,21 +125,17 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
 
                 break;
             default:
-                console.log('do all other actions');
+                this._keyManager.onKeydown(event);
         }
     }
 
     ngAfterContentInit(): void {
         console.log('ngAfterContentInit');
 
-        this._keyManager = new FocusKeyManager<McListOption>(this.options)
+        this._keyManager = new FocusKeyManager<McTreeNodeOption>(this.options)
             .withTypeAhead()
             .withVerticalOrientation(true)
             .withHorizontalOrientation(null);
-    }
-
-    ngAfterViewInit(): void {
-        console.log('ngAfterViewInit');
     }
 }
 

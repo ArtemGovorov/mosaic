@@ -243,6 +243,7 @@ export class CdkTree<T>
         viewContainer: ViewContainerRef = this._nodeOutlet.viewContainer,
         parentData?: T
     ) {
+        console.log('renderNodeChanges');
         const changes = dataDiffer.diff(data);
 
         if (!changes) { return; }
@@ -305,7 +306,8 @@ export class CdkTree<T>
 
         // Use default tree nodeOutlet, or nested node's nodeOutlet
         const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
-        container.createEmbeddedView(node.template, context, index);
+        console.log('createEmbeddedView');
+        const embeddedView = container.createEmbeddedView(node.template, context, index);
 
         // Set the data to just created `CdkTreeNode`.
         // The `CdkTreeNode` created from `createEmbeddedView` will be saved in static variable
@@ -317,6 +319,7 @@ export class CdkTree<T>
 
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges() {
+        console.log('_observeRenderChanges');
         let dataStream: Observable<T[]> | undefined;
 
         // Cannot use `instanceof DataSource` since the data source could be a literal with
@@ -344,6 +347,7 @@ export class CdkTree<T>
      * clearing the node outlet. Otherwise start listening for new data.
      */
     private _switchDataSource(dataSource: DataSource<T> | Observable<T[]> | T[]) {
+        console.log('_switchDataSource');
         if (this._dataSource && typeof (this._dataSource as DataSource<T>).disconnect === 'function') {
             (this.dataSource as DataSource<T>).disconnect(this);
         }
