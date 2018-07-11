@@ -87,12 +87,12 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
 
         switch (keyCode) {
             case LEFT_ARROW:
-                console.log('need collapse node');
+                this.treeControl.collapse(this._keyManager.activeItem.data);
                 event.preventDefault();
 
                 break;
             case RIGHT_ARROW:
-                console.log('need expand node');
+                this.treeControl.expand(this._keyManager.activeItem.data);
                 event.preventDefault();
 
                 break;
@@ -136,6 +136,10 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
             .withTypeAhead()
             .withVerticalOrientation(true)
             .withHorizontalOrientation(null);
+    }
+
+    setFocusedOption(option: McTreeNodeOption) {
+        this._keyManager.updateActiveItem(option);
     }
 }
 

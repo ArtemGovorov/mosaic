@@ -30,8 +30,7 @@ export class CdkTreeNodeToggle<T> {
     // set recursive(value: boolean) { this._recursive = toBoolean(value); }
     protected _recursive = false;
 
-    constructor(protected _tree: CdkTree<T>, protected _treeNode: CdkTreeNode<T>) {
-    }
+    constructor(protected _tree: CdkTree<T>, protected _treeNode: CdkTreeNode<T>) {}
 
     _toggle(event: Event): void {
         this.recursive

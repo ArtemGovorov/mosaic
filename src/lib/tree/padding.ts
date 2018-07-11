@@ -24,6 +24,6 @@ export class McTreeNodePadding<T> extends CdkTreeNodePadding<T> {
 
         const level = this._level || nodeLevel;
 
-        return level ? `${(level * this._indent) + 12}px` : '12px';
+        return level ? `${(level * this._indent) + 8}px` : '8px';
     }
 }

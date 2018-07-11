@@ -1,4 +1,4 @@
-import { Component, Injectable, NgModule } from '@angular/core';
+import { Component, Injectable, NgModule, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -122,6 +122,7 @@ class FileDatabase {
     selector: 'app',
     template: require('./template.html'),
     styleUrls: ['./styles.scss'],
+    encapsulation: ViewEncapsulation.None,
     providers: [FileDatabase]
 })
 export class DemoComponent {

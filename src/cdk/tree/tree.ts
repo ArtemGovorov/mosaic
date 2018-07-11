@@ -66,6 +66,7 @@ export class CdkTreeNode<T> implements IFocusableOption, OnDestroy {
     /** Subject that emits when the component has been destroyed. */
     protected _destroyed = new Subject<void>();
 
+    protected _data: T;
 
     /** The tree node's data. */
     get data(): T {
@@ -76,8 +77,6 @@ export class CdkTreeNode<T> implements IFocusableOption, OnDestroy {
         this._data = value;
         this._setRoleFromData();
     }
-
-    protected _data: T;
 
     get isExpanded(): boolean {
         return this._tree.treeControl.isExpanded(this._data);

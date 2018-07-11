@@ -3,6 +3,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { CdkTree, CdkTreeNode } from '@ptsecurity/cdk/tree';
 
 import { CanDisable, toBoolean } from '@ptsecurity/mosaic/core';
+import { McTreeSelection } from '@ptsecurity/mosaic/tree/tree';
 
 
 /**
@@ -19,9 +20,13 @@ import { CanDisable, toBoolean } from '@ptsecurity/mosaic/core';
         class: 'mc-tree-node',
 
         '(focus)': '_handleFocus()',
-        '(blur)': '_handleBlur()'
+        '(blur)': '_handleBlur()',
+
+        '(click)': '_handleClick()'
     },
-    providers: [{ provide: CdkTreeNode, useExisting: McTreeNodeOption }]
+    providers: [
+        { provide: CdkTreeNode, useExisting: McTreeNodeOption }
+    ]
 })
 export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
     @Input() role: 'treeitem' | 'group' = 'treeitem';
@@ -55,5 +60,9 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
 
     _handleBlur() {
         this._hasFocus = false;
+    }
+
+    _handleClick() {
+        this._tree.setFocusedOption(this);
     }
 }

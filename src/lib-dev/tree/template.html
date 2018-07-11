@@ -3,12 +3,11 @@
 <mc-tree-selection [dataSource]="dataSource" [treeControl]="treeControl">
     <mc-tree-node-option
         *mcTreeNodeDef="let node"
-        mcTreeNodePadding
-        disabled>
+        mcTreeNodePadding>
         {{ node.name }}
     </mc-tree-node-option>
 
-    <mc-tree-node-option *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding>
+    <mc-tree-node-option *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding mcTreeNodeToggle>
         <i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>
         {{ node.name }} : {{ node.type }}
     </mc-tree-node-option>

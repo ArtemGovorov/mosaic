@@ -14,13 +14,11 @@
     .mc-tree-node {
         color: mc-color($foreground, text);
 
-        margin-left: 2px;
-        margin-right: 2px;
-
-        border: 2px solid transparent;
+        border: 1px solid transparent;
 
         &.mc-focused {
             border-color: mc-color($primary, 500);
+            box-shadow: 0 0 0 1px mc-color($primary, 500);
         }
 
         &:hover,
