@@ -1,3 +1,4 @@
+import { SelectionModel } from '@ptsecurity/cdk/collections';
 import { CanDisable, HasTabIndex, mixinDisabled, mixinTabIndex, toBoolean } from '@ptsecurity/mosaic/core';
 
 import {
@@ -22,12 +23,16 @@ import { McTreeNodeOutlet } from './outlet';
 
 export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
 
-// Change event that is being fired whenever the selected state of an option changes. */
+export class McTreeNavigationChange {
+    constructor(
+        public source: McTreeSelection,
+        public option: McTreeNodeOption
+    ) {}
+}
+
 export class McTreeSelectionChange {
     constructor(
-        // Reference to the selection list that emitted the event.
         public source: McTreeSelection,
-        // Reference to the option that has been changed.
         public option: McTreeNodeOption
     ) {}
 }
@@ -61,8 +66,12 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
 
     _keyManager: FocusKeyManager<McTreeNodeOption>;
 
+    selectedOptions: SelectionModel<McTreeNodeOption>;
+
     _disabled: boolean = false;
     tabIndex: number;
+    multiple: boolean;
+    autoSelect: boolean;
 
     @Input()
     get disabled(): boolean {
@@ -83,16 +92,25 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         }
     }
 
-    @Output() readonly selectionChange: EventEmitter<McTreeSelectionChange> = new EventEmitter<McTreeSelectionChange>();
+    @Output() readonly navigationChange = new EventEmitter<McTreeNavigationChange>();
+
+    @Output() readonly selectionChange = new EventEmitter<McTreeSelectionChange>();
 
     constructor(
         _differs: IterableDiffers,
         _changeDetectorRef: ChangeDetectorRef,
-        @Attribute('tabindex') tabIndex: string
+        @Attribute('tabindex') tabIndex: string,
+        @Attribute('multiple') multiple: string,
+        @Attribute('auto-select') autoSelect: string
     ) {
         super(_differs, _changeDetectorRef);
 
         this.tabIndex = parseInt(tabIndex) || 0;
+
+        this.multiple = multiple === null ? true : toBoolean(multiple);
+        this.autoSelect = autoSelect === null ? true : toBoolean(autoSelect);
+
+        this.selectedOptions = new SelectionModel<McTreeNodeOption>(this.multiple);
     }
 
     _onKeyDown(event: KeyboardEvent) {
@@ -111,7 +129,8 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
                 break;
             case SPACE:
             case ENTER:
-                console.log('need select');
+                this.toggleFocusedOption();
+
                 event.preventDefault();
 
                 break;
@@ -167,11 +186,50 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
     setFocusedOption(option: McTreeNodeOption) {
         this._keyManager.updateActiveItem(option);
 
-        this._emitChangeEvent(option);
+        if (this.autoSelect) {
+            this.options.forEach((item) => item.setSelected(false));
+            option.setSelected(true);
+        }
+
+        this._emitNavigationEvent(option);
+    }
+
+    // Toggles the selected state of the currently focused option.
+    toggleFocusedOption(): void {
+        const focusedIndex = this._keyManager.activeItemIndex;
+
+        if (focusedIndex != null && this._isValidIndex(focusedIndex)) {
+            const focusedOption: McTreeNodeOption = this.options.toArray()[focusedIndex];
+
+            if (focusedOption && this._canUnselectLast(focusedOption)) {
+                focusedOption.toggle();
+
+                // Emit a change event because the focused option changed its state through user interaction.
+                this._emitChangeEvent(focusedOption);
+            }
+        }
+    }
+
+    _emitNavigationEvent(option: McTreeNodeOption): void {
+        this.navigationChange.emit(new McTreeNavigationChange(this, option));
     }
 
     _emitChangeEvent(option: McTreeNodeOption): void {
-        this.selectionChange.emit(new McTreeSelectionChange(this, option));
+        this.selectionChange.emit(new McTreeNavigationChange(this, option));
+    }
+
+    /**
+     * Utility to ensure all indexes are valid.
+     * @param index The index to be checked.
+     * @returns True if the index is valid for our list of options.
+     */
+    private _isValidIndex(index: number): boolean {
+        return index >= 0 && index < this.options.length;
+    }
+
+    private _canUnselectLast(option: McTreeNodeOption): boolean {
+        return true;
+        // return !(this.noUnselect && this.selectedOptions.selected.length === 1 && listOption.selected);
     }
 }
 

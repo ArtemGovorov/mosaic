@@ -1,8 +1,10 @@
 <h5>multiple selection</h5>
 
 <mc-tree-selection
+    auto-select="false"
     [dataSource]="dataSource"
     [treeControl]="treeControl"
+    (navigationChange)="onNavigationChange($event)"
     (selectionChange)="onSelectionChange($event)">
 
     <mc-tree-node-option
