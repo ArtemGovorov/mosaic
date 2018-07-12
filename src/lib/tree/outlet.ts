@@ -1,5 +1,3 @@
-import { CdkTreeNodeOutlet } from '@ptsecurity/cdk/tree';
-
 import { Directive, ViewContainerRef } from '@angular/core';
 
 

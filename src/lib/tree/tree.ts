@@ -1,13 +1,13 @@
 import { CanDisable, HasTabIndex, mixinDisabled, mixinTabIndex, toBoolean } from '@ptsecurity/mosaic/core';
 
 import {
-    AfterContentInit,
+    AfterContentInit, AfterViewInit,
     Attribute,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component, ContentChildren, Input,
-    IterableDiffers, QueryList,
-    ViewChild,
+    Component, ContentChildren, ElementRef, EventEmitter, Input,
+    IterableDiffers, Output, QueryList,
+    ViewChild, ViewChildren,
     ViewEncapsulation
 } from '@angular/core';
 
@@ -21,6 +21,16 @@ import { McTreeNodeOutlet } from './outlet';
 
 
 export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
+
+// Change event that is being fired whenever the selected state of an option changes. */
+export class McTreeSelectionChange {
+    constructor(
+        // Reference to the selection list that emitted the event.
+        public source: McTreeSelection,
+        // Reference to the option that has been changed.
+        public option: McTreeNodeOption
+    ) {}
+}
 
 /**
  * Wrapper for the CdkTable with Material design styles.
@@ -41,11 +51,13 @@ export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
     providers: [{ provide: CdkTree, useExisting: McTreeSelection }]
 })
 export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
-    implements AfterContentInit, CanDisable, HasTabIndex {
+    implements AfterContentInit, AfterViewInit, CanDisable, HasTabIndex {
     // Outlets within the tree's template where the dataNodes will be inserted.
     @ViewChild(McTreeNodeOutlet) _nodeOutlet: McTreeNodeOutlet;
 
-    @ContentChildren(McTreeNodeOption) options: QueryList<McTreeNodeOption>;
+    @ContentChildren(McTreeNodeOption) options: QueryList<ElementRef>;
+
+    @ViewChildren(McTreeNodeOption) viewOptions: QueryList<ElementRef>;
 
     _keyManager: FocusKeyManager<McTreeNodeOption>;
 
@@ -69,8 +81,9 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
                 console.log('need enable all options');
             }
         }
-
     }
+
+    @Output() readonly selectionChange: EventEmitter<McTreeSelectionChange> = new EventEmitter<McTreeSelectionChange>();
 
     constructor(
         _differs: IterableDiffers,
@@ -129,8 +142,21 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         }
     }
 
+    ngAfterViewInit(): void {
+        console.log('ngAfterViewInit');
+        this.viewOptions.changes.subscribe((items) => {
+            console.log('view items updated');
+        });
+    }
+
     ngAfterContentInit(): void {
         console.log('ngAfterContentInit');
+
+        const self  = this;
+
+        this.options.changes.subscribe((items) => {
+            console.log('content items updated');
+        });
 
         this._keyManager = new FocusKeyManager<McTreeNodeOption>(this.options)
             .withTypeAhead()
@@ -140,6 +166,12 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
 
     setFocusedOption(option: McTreeNodeOption) {
         this._keyManager.updateActiveItem(option);
+
+        this._emitChangeEvent(option);
+    }
+
+    _emitChangeEvent(option: McTreeNodeOption): void {
+        this.selectionChange.emit(new McTreeSelectionChange(this, option));
     }
 }
 

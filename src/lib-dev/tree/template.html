@@ -1,6 +1,10 @@
 <h5>multiple selection</h5>
 
-<mc-tree-selection [dataSource]="dataSource" [treeControl]="treeControl">
+<mc-tree-selection
+    [dataSource]="dataSource"
+    [treeControl]="treeControl"
+    (selectionChange)="onSelectionChange($event)">
+
     <mc-tree-node-option
         *mcTreeNodeDef="let node"
         mcTreeNodePadding>

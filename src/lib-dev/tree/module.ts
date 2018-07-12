@@ -173,8 +173,11 @@ export class DemoComponent {
 
     private _getChildren = (node: FileNode): Observable<FileNode[]> => {
         return observableOf(node.children);
-    }
+    };
 
+    onSelectionChange($event) {
+        console.log('onSelectionChange');
+    }
 }
 
 

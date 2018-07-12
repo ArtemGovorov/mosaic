@@ -132,8 +132,7 @@ export class CdkTreeNode<T> implements IFocusableOption, OnDestroy {
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CdkTree<T>
-    implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
 
     /** The tree controller */
     @Input() treeControl: ITreeControl<T>;
@@ -242,7 +241,6 @@ export class CdkTree<T>
         viewContainer: ViewContainerRef = this._nodeOutlet.viewContainer,
         parentData?: T
     ) {
-        console.log('renderNodeChanges');
         const changes = dataDiffer.diff(data);
 
         if (!changes) { return; }
@@ -253,6 +251,7 @@ export class CdkTree<T>
                     this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
                 } else if (currentIndex == null) {
                     viewContainer.remove(adjustedPreviousIndex);
+
                     this._levels.delete(item.item);
                 } else {
                     const view = viewContainer.get(adjustedPreviousIndex);
