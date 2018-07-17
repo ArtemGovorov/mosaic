@@ -16,7 +16,7 @@ import {
     ViewChild,
     ViewContainerRef,
     ViewEncapsulation,
-    TrackByFunction
+    TrackByFunction, ViewRef
 } from '@angular/core';
 
 import { IFocusableOption } from '@ptsecurity/cdk/a11y';
@@ -35,6 +35,7 @@ import {
     getTreeMultipleDefaultNodeDefsError,
     getTreeNoValidDataSourceError
 } from './tree-errors';
+import { ViewData } from '@angular/core/src/view';
 
 
 /**
@@ -260,7 +261,27 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
             }
         );
 
-        this._changeDetectorRef.detectChanges();
+        // if (this.viewOptions) {
+        //     this.viewOptions.setDirty();
+        //     // this.viewOptions.reset(['qwe', 'qwe']);
+        //     // this.viewOptions.notifyOnChanges();
+        // }
+
+        const arr = viewContainer._embeddedViews.map((view: ViewData) => {
+            const viewDef = view.def;
+            const nodeMatchedQueryId = viewDef.nodeMatchedQueries;
+
+            const queryMatch = viewDef.nodes.find((node) => nodeMatchedQueryId === node.matchedQueryIds);
+
+            return view.nodes[queryMatch.nodeIndex].instance;
+        });
+
+        if (this.options) {
+            this.options.reset(arr);
+            this.options.notifyOnChanges();
+        }
+
+        // this._changeDetectorRef.detectChanges();
     }
 
     /**

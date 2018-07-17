@@ -17,8 +17,7 @@ import {
 } from '@ptsecurity/cdk/tree';
 
 import { CanDisable, mixinDisabled } from '@ptsecurity/mosaic/core';
-
-import { McTreeNodeOutlet } from './outlet';
+import { CdkTreeNodeOutlet } from '@ptsecurity/cdk/tree/outlet';
 
 
 export const _MatNestedTreeNodeMixinBase = mixinDisabled(CdkNestedTreeNode);
@@ -57,7 +56,7 @@ export class McNestedTreeNode<T> extends _MatNestedTreeNodeMixinBase<T>
 
     @Input('matNestedTreeNode') node: T;
 
-    @ContentChildren(McTreeNodeOutlet) nodeOutlet: QueryList<McTreeNodeOutlet>;
+    @ContentChildren(CdkTreeNodeOutlet) nodeOutlet: QueryList<CdkTreeNodeOutlet>;
 
     constructor(
         protected _elementRef: ElementRef,

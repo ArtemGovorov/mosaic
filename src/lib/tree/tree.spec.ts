@@ -616,7 +616,7 @@ class SimpleMatTreeApp {
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
             <mc-tree-nested-node *mcTreeNodeDef="let node" class="customNodeClass">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-                <ng-template mcTreeNodeOutlet></ng-template>
+                <ng-template cdkTreeNodeOutlet></ng-template>
             </mc-tree-nested-node>
         </mc-tree>
     `
@@ -643,13 +643,13 @@ class NestedMatTreeApp {
         <mc-tree [dataSource]="dataSource" [treeControl]="treeControl">
             <mc-tree-nested-node *mcTreeNodeDef="let node">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
-                <ng-template mcTreeNodeOutlet></ng-template>
+                <ng-template cdkTreeNodeOutlet></ng-template>
             </mc-tree-nested-node>
             <mc-tree-nested-node *mcTreeNodeDef="let node; when: isSpecial"
                                  mcTreeNodeToggle>
                 >>> {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
-                    <ng-template mcTreeNodeOutlet></ng-template>
+                    <ng-template cdkTreeNodeOutlet></ng-template>
                 </div>
             </mc-tree-nested-node>
         </mc-tree>
@@ -721,7 +721,7 @@ class MatTreeAppWithToggle {
                                  mcTreeNodeToggle [mcTreeNodeToggleRecursive]="toggleRecursively">
                 {{node.pizzaTopping}} - {{node.pizzaCheese}} + {{node.pizzaBase}}
                 <div *ngIf="treeControl.isExpanded(node)">
-                    <ng-template mcTreeNodeOutlet></ng-template>
+                    <ng-template cdkTreeNodeOutlet></ng-template>
                 </div>
             </mc-tree-nested-node>
         </mc-tree>

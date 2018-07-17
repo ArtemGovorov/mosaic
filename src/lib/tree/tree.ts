@@ -13,12 +13,12 @@ import {
 } from '@angular/core';
 
 import { FocusKeyManager } from '@ptsecurity/cdk/a11y';
-import { CdkTree } from '@ptsecurity/cdk/tree';
+import { CdkTree, CdkTreeNodeOutlet } from '@ptsecurity/cdk/tree';
 
 import { END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE } from '@ptsecurity/cdk/keycodes';
 
 import { McTreeNodeOption } from './node-option';
-import { McTreeNodeOutlet } from './outlet';
+import { QueryValueType } from '@angular/compiler/src/core';
 
 
 export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
@@ -43,7 +43,7 @@ export class McTreeSelectionChange {
 @Component({
     exportAs: 'mcTreeSelection',
     selector: 'mc-tree-selection',
-    template: `<ng-container mcTreeNodeOutlet></ng-container>`,
+    template: `<ng-container cdkTreeNodeOutlet></ng-container>`,
     host: {
         '[tabIndex]': 'tabIndex',
         class: 'mc-tree',
@@ -58,11 +58,10 @@ export class McTreeSelectionChange {
 export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
     implements AfterContentInit, AfterViewInit, CanDisable, HasTabIndex {
     // Outlets within the tree's template where the dataNodes will be inserted.
-    @ViewChild(McTreeNodeOutlet) _nodeOutlet: McTreeNodeOutlet;
-
-    @ContentChildren(McTreeNodeOption) options: QueryList<ElementRef>;
-
+    @ViewChild(CdkTreeNodeOutlet) _nodeOutlet: CdkTreeNodeOutlet;
     @ViewChildren(McTreeNodeOption) viewOptions: QueryList<ElementRef>;
+
+    @ContentChildren(McTreeNodeOption, { read: QueryValueType.ElementRef }) options: QueryList<ElementRef>;
 
     _keyManager: FocusKeyManager<McTreeNodeOption>;
 
@@ -174,6 +173,7 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         const self  = this;
 
         this.options.changes.subscribe((items) => {
+            self
             console.log('content items updated');
         });
 
