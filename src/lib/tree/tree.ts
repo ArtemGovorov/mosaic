@@ -1,14 +1,17 @@
+import { QueryValueType } from '@angular/compiler/src/core';
+import { asElementData, NodeData, NodeDef, ProviderData, ViewContainerData, ViewData } from '@angular/core/src/view';
+import { getQueryValue } from '@angular/core/src/view/query';
 import { SelectionModel } from '@ptsecurity/cdk/collections';
 import { CanDisable, HasTabIndex, mixinDisabled, mixinTabIndex, toBoolean } from '@ptsecurity/mosaic/core';
 
 import {
-    AfterContentInit, AfterViewInit,
+    AfterContentInit,
     Attribute,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component, ContentChildren, ElementRef, EventEmitter, Input,
+    Component, ContentChildren, EventEmitter, forwardRef, Input, IterableDiffer,
     IterableDiffers, Output, QueryList,
-    ViewChild, ViewChildren,
+    ViewChild, ViewContainerRef,
     ViewEncapsulation
 } from '@angular/core';
 
@@ -18,22 +21,21 @@ import { CdkTree, CdkTreeNodeOutlet } from '@ptsecurity/cdk/tree';
 import { END, ENTER, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, SPACE } from '@ptsecurity/cdk/keycodes';
 
 import { McTreeNodeOption } from './node-option';
-import { QueryValueType } from '@angular/compiler/src/core';
 
 
-export const _McTreeSelectionMixinBase = mixinTabIndex(mixinDisabled(CdkTree));
+export const _McTreeSelectionBase = mixinTabIndex(mixinDisabled(CdkTree));
 
 export class McTreeNavigationChange {
     constructor(
-        public source: McTreeSelection,
-        public option: McTreeNodeOption
+        public source: McTreeSelection<any>,
+        public option: McTreeNodeOption<any>
     ) {}
 }
 
 export class McTreeSelectionChange {
     constructor(
-        public source: McTreeSelection,
-        public option: McTreeNodeOption
+        public source: McTreeSelection<any>,
+        public option: McTreeNodeOption<any>
     ) {}
 }
 
@@ -55,17 +57,16 @@ export class McTreeSelectionChange {
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [{ provide: CdkTree, useExisting: McTreeSelection }]
 })
-export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
-    implements AfterContentInit, AfterViewInit, CanDisable, HasTabIndex {
+export class McTreeSelection<T> extends _McTreeSelectionBase<T>
+    implements AfterContentInit, CanDisable, HasTabIndex {
     // Outlets within the tree's template where the dataNodes will be inserted.
     @ViewChild(CdkTreeNodeOutlet) _nodeOutlet: CdkTreeNodeOutlet;
-    @ViewChildren(McTreeNodeOption) viewOptions: QueryList<ElementRef>;
 
-    @ContentChildren(McTreeNodeOption, { read: QueryValueType.ElementRef }) options: QueryList<ElementRef>;
+    @ContentChildren(forwardRef(() => McTreeNodeOption)) options: QueryList<McTreeNodeOption<T>>;
 
-    _keyManager: FocusKeyManager<McTreeNodeOption>;
+    _keyManager: FocusKeyManager<McTreeNodeOption<T>>;
 
-    selectedOptions: SelectionModel<McTreeNodeOption>;
+    selectedOptions: SelectionModel<McTreeNodeOption<T>>;
 
     _disabled: boolean = false;
     tabIndex: number;
@@ -109,7 +110,7 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         this.multiple = multiple === null ? true : toBoolean(multiple);
         this.autoSelect = autoSelect === null ? true : toBoolean(autoSelect);
 
-        this.selectedOptions = new SelectionModel<McTreeNodeOption>(this.multiple);
+        this.selectedOptions = new SelectionModel<McTreeNodeOption<T>>(this.multiple);
     }
 
     _onKeyDown(event: KeyboardEvent) {
@@ -160,30 +161,14 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         }
     }
 
-    ngAfterViewInit(): void {
-        console.log('ngAfterViewInit');
-        this.viewOptions.changes.subscribe((items) => {
-            console.log('view items updated');
-        });
-    }
-
     ngAfterContentInit(): void {
-        console.log('ngAfterContentInit');
-
-        const self  = this;
-
-        this.options.changes.subscribe((items) => {
-            self
-            console.log('content items updated');
-        });
-
-        this._keyManager = new FocusKeyManager<McTreeNodeOption>(this.options)
+        this._keyManager = new FocusKeyManager<McTreeNodeOption<T>>(this.options)
             .withTypeAhead()
             .withVerticalOrientation(true)
             .withHorizontalOrientation(null);
     }
 
-    setFocusedOption(option: McTreeNodeOption) {
+    setFocusedOption(option: McTreeNodeOption<T>) {
         this._keyManager.updateActiveItem(option);
 
         if (this.autoSelect) {
@@ -199,7 +184,7 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         const focusedIndex = this._keyManager.activeItemIndex;
 
         if (focusedIndex != null && this._isValidIndex(focusedIndex)) {
-            const focusedOption: McTreeNodeOption = this.options.toArray()[focusedIndex];
+            const focusedOption: McTreeNodeOption<T> = this.options.toArray()[focusedIndex];
 
             if (focusedOption && this._canUnselectLast(focusedOption)) {
                 focusedOption.toggle();
@@ -210,11 +195,40 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         }
     }
 
-    _emitNavigationEvent(option: McTreeNodeOption): void {
+    renderNodeChanges(
+        data: T[],
+        dataDiffer: IterableDiffer<T> = this._dataDiffer,
+        viewContainer: ViewContainerRef = this._nodeOutlet.viewContainer,
+        parentData?: T
+    ) {
+        super.renderNodeChanges(data, dataDiffer, viewContainer, parentData);
+
+        const arrayOfInstances = [];
+
+        viewContainer._embeddedViews.forEach((view: ViewData) => {
+            const viewDef = view.def;
+
+            viewDef.nodes.forEach((node: NodeDef) => {
+                if (viewDef.nodeMatchedQueries === node.matchedQueryIds) {
+                    const nodeData = view.nodes[node.nodeIndex] as any;
+
+                    arrayOfInstances.push(nodeData.instance);
+                }
+            });
+
+        });
+
+        if (this.options) {
+            this.options.reset(arrayOfInstances);
+            this.options.notifyOnChanges();
+        }
+    }
+
+    _emitNavigationEvent(option: McTreeNodeOption<T>): void {
         this.navigationChange.emit(new McTreeNavigationChange(this, option));
     }
 
-    _emitChangeEvent(option: McTreeNodeOption): void {
+    _emitChangeEvent(option: McTreeNodeOption<T>): void {
         this.selectionChange.emit(new McTreeNavigationChange(this, option));
     }
 
@@ -227,7 +241,7 @@ export class McTreeSelection<T> extends _McTreeSelectionMixinBase<T>
         return index >= 0 && index < this.options.length;
     }
 
-    private _canUnselectLast(option: McTreeNodeOption): boolean {
+    private _canUnselectLast(option: McTreeNodeOption<T>): boolean {
         return true;
         // return !(this.noUnselect && this.selectedOptions.selected.length === 1 && listOption.selected);
     }

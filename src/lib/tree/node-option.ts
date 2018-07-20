@@ -3,6 +3,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { CdkTree, CdkTreeNode } from '@ptsecurity/cdk/tree';
 
 import { CanDisable, toBoolean } from '@ptsecurity/mosaic/core';
+import { McTreeSelection } from '@ptsecurity/mosaic/tree/tree';
 
 
 /**
@@ -46,7 +47,7 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
 
     @Input()
     get selected(): boolean {
-        return this._tree.selectedOptions && this._tree.selectedOptions.isSelected(this) || false;
+        return this.treeSelection.selectedOptions && this.treeSelection.selectedOptions.isSelected(this) || false;
     }
 
     set selected(value: boolean) {
@@ -55,7 +56,7 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
         if (isSelected !== this._selected) {
             this.setSelected(isSelected);
 
-            // this._tree._reportValueChange();
+            // this.treeSelection._reportValueChange();
         }
     }
 
@@ -64,14 +65,14 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
     private _disabled: boolean = false;
     private _selected: boolean = false;
 
-    constructor(protected _elementRef: ElementRef, protected _tree: CdkTree<T>) {
-        super(_elementRef, _tree);
+    constructor(protected _elementRef: ElementRef, protected treeSelection: McTreeSelection<T>) {
+        super(_elementRef, treeSelection);
     }
 
     focus(): void {
         this._elementRef.nativeElement.focus();
 
-        this._tree.setFocusedOption(this);
+        this.treeSelection.setFocusedOption(this);
     }
 
     toggle(): void {
@@ -79,14 +80,14 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
     }
 
     setSelected(selected: boolean) {
-        if (this._selected === selected || !this._tree.selectedOptions) { return; }
+        if (this._selected === selected || !this.treeSelection.selectedOptions) { return; }
 
         this._selected = selected;
 
         if (selected) {
-            this._tree.selectedOptions.select(this);
+            this.treeSelection.selectedOptions.select(this);
         } else {
-            this._tree.selectedOptions.deselect(this);
+            this.treeSelection.selectedOptions.deselect(this);
         }
 
         // this._changeDetector.markForCheck();
@@ -105,6 +106,6 @@ export class McTreeNodeOption<T> extends CdkTreeNode<T> implements CanDisable {
     _handleClick(): void {
         if (this.disabled) { return; }
 
-        this._tree.setFocusedOption(this);
+        this.treeSelection.setFocusedOption(this);
     }
 }

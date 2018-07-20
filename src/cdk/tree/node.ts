@@ -41,7 +41,5 @@ export class CdkTreeNodeDef<T> {
     when: (index: number, nodeData: T) => boolean;
 
     /** @docs-private */
-    constructor(public template: TemplateRef<any>) {
-        console.log('CdkTreeNodeDef');
-    }
+    constructor(public template: TemplateRef<any>) {}
 }

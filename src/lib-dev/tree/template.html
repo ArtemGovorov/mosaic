@@ -13,8 +13,8 @@
         {{ node.name }}
     </mc-tree-node-option>
 
-    <mc-tree-node-option *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding mcTreeNodeToggle>
-        <i mc-icon="mc-angle-S_16" mcTreeNodeToggle></i>
+    <mc-tree-node-option *mcTreeNodeDef="let node; when: hasChild" mcTreeNodePadding>
+        <i mc-icon="mc-angle-S_16" cdkTreeNodeToggle></i>
         {{ node.name }} : {{ node.type }}
     </mc-tree-node-option>
 </mc-tree-selection>

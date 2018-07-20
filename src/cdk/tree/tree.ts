@@ -16,8 +16,9 @@ import {
     ViewChild,
     ViewContainerRef,
     ViewEncapsulation,
-    TrackByFunction, ViewRef
+    TrackByFunction
 } from '@angular/core';
+import { ViewContainerData, ViewData } from '@angular/core/src/view';
 
 import { IFocusableOption } from '@ptsecurity/cdk/a11y';
 import { CollectionViewer, DataSource } from '@ptsecurity/cdk/collections';
@@ -35,7 +36,6 @@ import {
     getTreeMultipleDefaultNodeDefsError,
     getTreeNoValidDataSourceError
 } from './tree-errors';
-import { ViewData } from '@angular/core/src/view';
 
 
 /**
@@ -161,11 +161,12 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
     viewChange =
         new BehaviorSubject<{ start: number, end: number }>({ start: 0, end: Number.MAX_VALUE });
 
+    /** Differ used to find the changes in the data provided by the data source. */
+    protected _dataDiffer: IterableDiffer<T>;
+
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy = new Subject<void>();
 
-    /** Differ used to find the changes in the data provided by the data source. */
-    private _dataDiffer: IterableDiffer<T>;
 
     /** Stores the node definition that does not have a when predicate. */
     private _defaultNodeDef: CdkTreeNodeDef<T> | null;
@@ -233,7 +234,7 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
     }
 
     // TODO(tinayuangao): Work on keyboard traversal and actions, make sure it's working for RTL
-    //     and nested trees.
+    // and nested trees.
 
     /** Check for changes made in the data and render each change (node added/removed/moved). */
     renderNodeChanges(
@@ -242,6 +243,7 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
         viewContainer: ViewContainerRef = this._nodeOutlet.viewContainer,
         parentData?: T
     ) {
+        console.log('super.renderNodeChanges');
         const changes = dataDiffer.diff(data);
 
         if (!changes) { return; }
@@ -261,27 +263,7 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
             }
         );
 
-        // if (this.viewOptions) {
-        //     this.viewOptions.setDirty();
-        //     // this.viewOptions.reset(['qwe', 'qwe']);
-        //     // this.viewOptions.notifyOnChanges();
-        // }
-
-        const arr = viewContainer._embeddedViews.map((view: ViewData) => {
-            const viewDef = view.def;
-            const nodeMatchedQueryId = viewDef.nodeMatchedQueries;
-
-            const queryMatch = viewDef.nodes.find((node) => nodeMatchedQueryId === node.matchedQueryIds);
-
-            return view.nodes[queryMatch.nodeIndex].instance;
-        });
-
-        if (this.options) {
-            this.options.reset(arr);
-            this.options.notifyOnChanges();
-        }
-
-        // this._changeDetectorRef.detectChanges();
+        this._changeDetectorRef.detectChanges();
     }
 
     /**
@@ -325,8 +307,7 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
 
         // Use default tree nodeOutlet, or nested node's nodeOutlet
         const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
-        console.log('createEmbeddedView');
-        const embeddedView = container.createEmbeddedView(node.template, context, index);
+        container.createEmbeddedView(node.template, context, index);
 
         // Set the data to just created `CdkTreeNode`.
         // The `CdkTreeNode` created from `createEmbeddedView` will be saved in static variable
@@ -338,7 +319,6 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
 
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges() {
-        console.log('_observeRenderChanges');
         let dataStream: Observable<T[]> | undefined;
 
         // Cannot use `instanceof DataSource` since the data source could be a literal with
@@ -366,7 +346,6 @@ export class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDest
      * clearing the node outlet. Otherwise start listening for new data.
      */
     private _switchDataSource(dataSource: DataSource<T> | Observable<T[]> | T[]) {
-        console.log('_switchDataSource');
         if (this._dataSource && typeof (this._dataSource as DataSource<T>).disconnect === 'function') {
             (this.dataSource as DataSource<T>).disconnect(this);
         }
